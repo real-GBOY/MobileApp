@@ -1,10 +1,15 @@
 /** @format */
 
-import { Colors } from "@/styles/colors";
+import { useTheme } from "@/contexts/ThemeProvider";
 
+/**
+ * @deprecated Use `useTheme()` hook instead for better theme support
+ * This hook is kept for backward compatibility
+ */
 export function useThemeColor(
 	props: { color?: string },
-	colorName: keyof typeof Colors
+	colorName: keyof ReturnType<typeof useTheme>["colors"]
 ) {
-	return props.color ?? Colors[colorName];
+	const { colors } = useTheme();
+	return props.color ?? colors[colorName];
 }

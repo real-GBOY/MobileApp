@@ -1,7 +1,11 @@
 /** @format */
 
+import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { useLoadFonts } from "@/hooks/useLoadFonts";
-import { DefaultTheme, ThemeProvider } from "@react-navigation/native";
+import {
+	DefaultTheme,
+	ThemeProvider as NavigationThemeProvider,
+} from "@react-navigation/native";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
@@ -18,11 +22,13 @@ export default function RootNavigator() {
 
 	return (
 		<SafeAreaProvider>
-			<ThemeProvider value={DefaultTheme}>
-				<Stack>
-					<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-				</Stack>
-				<StatusBar style='auto' />
+			<ThemeProvider>
+				<NavigationThemeProvider value={DefaultTheme}>
+					<Stack>
+						<Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+					</Stack>
+					<StatusBar style='auto' />
+				</NavigationThemeProvider>
 			</ThemeProvider>
 		</SafeAreaProvider>
 	);

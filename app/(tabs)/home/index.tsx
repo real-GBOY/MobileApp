@@ -1,5 +1,5 @@
 /** @format */
 
-export default function HomeScreen() {
-	return null;
-}
+import HomeScreen from "@/screens/Home/HomeScreen";
+
+export default HomeScreen;
