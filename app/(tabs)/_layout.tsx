@@ -1,10 +1,11 @@
 /** @format */
 
 import { ChatText, House, MemoListCheckClock } from "@/components/icons";
+import { getTabBarColors, getTabBarConfig } from "@/navigation/tabBarConfig";
 import { Image } from "expo-image";
 import { Tabs } from "expo-router";
 import React from "react";
-import { View } from "react-native";
+import { I18nManager, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Avatar image URL from Figma
@@ -14,33 +15,31 @@ const avatarImage =
 export default function TabLayout() {
 	const insets = useSafeAreaInsets();
 	const bottomPadding = Math.max(insets.bottom, 8);
+	const colors = getTabBarColors("light");
+	const isRTL = I18nManager.isRTL;
+	const config = getTabBarConfig(isRTL);
 
 	return (
 		<Tabs
 			screenOptions={{
 				headerShown: false,
 				tabBarStyle: {
-					backgroundColor: "#ffffff",
+					backgroundColor: colors.background,
 					borderTopWidth: 1,
-					borderTopColor: "#e5e7eb",
-					height: 64 + bottomPadding,
+					borderTopColor: colors.border,
+					height: config.bar.height + bottomPadding,
 					paddingBottom: bottomPadding,
-					paddingTop: 12,
+					paddingTop: config.bar.paddingTop,
 					elevation: 0,
 					shadowOpacity: 0,
 					borderTopLeftRadius: 0,
 					borderTopRightRadius: 0,
 				},
-				tabBarActiveTintColor: "#171717",
-				tabBarInactiveTintColor: "#a3a3a3",
-				tabBarLabelStyle: {
-					fontSize: 12,
-					fontWeight: "400",
-					lineHeight: 16,
-					marginTop: 6,
-				},
+				tabBarActiveTintColor: colors.activeText,
+				tabBarInactiveTintColor: colors.inactiveText,
+				tabBarLabelStyle: config.label,
 				tabBarItemStyle: {
-					gap: 6,
+					gap: config.item.gap,
 				},
 			}}>
 			<Tabs.Screen
@@ -49,16 +48,11 @@ export default function TabLayout() {
 					title: "Home",
 					tabBarIcon: ({ focused }) => (
 						<House
-							size={24}
-							color={focused ? "#335cff" : "#5c5c5c"}
+							size={config.icon.size}
+							color={focused ? colors.activeIcon : colors.inactiveIcon}
 						/>
 					),
-					tabBarLabelStyle: {
-						fontSize: 12,
-						fontWeight: "500",
-						lineHeight: 16,
-						marginTop: 6,
-					},
+					tabBarLabelStyle: config.labelActive,
 				}}
 			/>
 			<Tabs.Screen
@@ -67,8 +61,8 @@ export default function TabLayout() {
 					title: "My Requests",
 					tabBarIcon: ({ focused }) => (
 						<MemoListCheckClock
-							size={24}
-							color={focused ? "#335cff" : "#5c5c5c"}
+							size={config.icon.size}
+							color={focused ? colors.activeIcon : colors.inactiveIcon}
 						/>
 					),
 				}}
@@ -79,8 +73,8 @@ export default function TabLayout() {
 					title: "Messages",
 					tabBarIcon: ({ focused }) => (
 						<ChatText
-							size={24}
-							color={focused ? "#335cff" : "#5c5c5c"}
+							size={config.icon.size}
+							color={focused ? colors.activeIcon : colors.inactiveIcon}
 						/>
 					),
 				}}
@@ -92,17 +86,17 @@ export default function TabLayout() {
 					tabBarIcon: ({ focused }) => (
 						<View
 							style={{
-								width: 24,
-								height: 24,
-								borderRadius: 12,
-								backgroundColor: "#e1e4ea",
+								width: config.avatar.size,
+								height: config.avatar.size,
+								borderRadius: config.avatar.borderRadius,
+								backgroundColor: colors.avatarBg,
 								overflow: "hidden",
 							}}>
 							<Image
 								source={{ uri: avatarImage }}
 								style={{
-									width: 24,
-									height: 24,
+									width: config.avatar.size,
+									height: config.avatar.size,
 								}}
 								contentFit='cover'
 							/>
