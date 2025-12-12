@@ -4,6 +4,7 @@
 // Run: pnpm run icons:index
 // Add SVG files to src/assets/raw-icons/ and run: pnpm run icons:generate
 
-// No icons yet. Add SVG files to src/assets/raw-icons/ and run:
-// pnpm run icons:generate && pnpm run icons:index
+export { default as ChatText } from "./chat-text";
+export { default as House } from "./house";
+export { default as MemoListCheckClock } from "./memo-list-check-clock";
 
