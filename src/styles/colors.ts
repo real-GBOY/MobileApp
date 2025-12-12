@@ -3,7 +3,7 @@
 export const MAIN_COLORS = {
   light: {
      primary: "#7d52f4",
-     "primary-dark": "#6b45e0",
+     "primary-dark": "#4c25a7",
      background: "#ffffff",
      "icon-sub": "#5C5C5C",
      "text-gray": "#5C5C5C",
@@ -48,7 +48,7 @@ export const MAIN_COLORS = {
   },
   dark: {
      primary: "#7d52f4",
-     "primary-dark": "#6b45e0",
+     "primary-dark": "#4c25a7",
      background: "#0F0F1B",
      "icon-sub": "#5C5C5C",
      "text-gray": "#5C5C5C",

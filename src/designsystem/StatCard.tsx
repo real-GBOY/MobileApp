@@ -4,6 +4,7 @@ import CalendarXmarkCircle from "@/components/icons/calendar-xmark-circle";
 import { useTheme } from "@/contexts/ThemeProvider";
 import { SPACING } from "@/styles/spacing";
 import { TYPOGRAPHY } from "@/styles/typography";
+import { getFontFamily } from "@/utils/fonts";
 import React from "react";
 import { StyleSheet, Text, View, ViewStyle } from "react-native";
 
@@ -11,13 +12,13 @@ export type StatusLevel = "low" | "medium" | "high";
 
 export interface StatCardProps {
 	title: string;
-	value: string;
+	value?: string;
+	customValue?: React.ReactNode;
 	status?: StatusLevel;
 	statusLabel?: string;
 	icon?: React.ReactNode;
 	iconColor?: string;
 	iconBgColor?: string;
-	customValue?: React.ReactNode;
 	style?: ViewStyle;
 }
 
@@ -77,12 +78,12 @@ const StatusIndicator = ({ level }: { level: StatusLevel }) => {
 export const StatCard: React.FC<StatCardProps> = ({
 	title,
 	value,
+	customValue,
 	status,
 	statusLabel,
 	icon,
 	iconColor,
 	iconBgColor,
-	customValue,
 	style,
 }) => {
 	const { colors } = useTheme();
@@ -95,6 +96,8 @@ export const StatCard: React.FC<StatCardProps> = ({
 
 	const defaultIconColor = iconColor || colors.danger;
 	const defaultIconBgColor = iconBgColor || colors["danger-light"];
+
+	const showStatusBadge = status !== undefined;
 
 	return (
 		<View
@@ -131,35 +134,34 @@ export const StatCard: React.FC<StatCardProps> = ({
 						styles.title,
 						{
 							color: colors["text-sub"],
-							fontFamily: TYPOGRAPHY.fontFamily.medium,
+							fontFamily: getFontFamily("medium"),
 						},
 					]}
+					numberOfLines={1}
 				>
 					{title}
 				</Text>
 			</View>
 
 			{/* Bottom Row: Value + Status Badge */}
-			<View
-				style={[
-					styles.bottomRow,
-					!status && styles.bottomRowNoStatus,
-				]}
-			>
-				{customValue || (
+			<View style={styles.bottomRow}>
+				{customValue ? (
+					customValue
+				) : (
 					<Text
 						style={[
 							styles.value,
 							{
 								color: colors["text-strong"],
-								fontFamily: TYPOGRAPHY.fontFamily.medium,
+								fontFamily: getFontFamily("medium"),
 							},
 						]}
+						numberOfLines={1}
 					>
 						{value}
 					</Text>
 				)}
-				{status && (
+				{showStatusBadge && (
 					<View
 						style={[
 							styles.statusBadge,
@@ -174,9 +176,10 @@ export const StatCard: React.FC<StatCardProps> = ({
 								styles.statusLabel,
 								{
 									color: colors["text-sub"],
-									fontFamily: TYPOGRAPHY.fontFamily.medium,
+									fontFamily: getFontFamily("medium"),
 								},
 							]}
+							numberOfLines={1}
 						>
 							{getStatusLabel()}
 						</Text>
@@ -222,8 +225,8 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		flex: 1,
-		fontSize: TYPOGRAPHY.fontSize.base,
-		lineHeight: 24,
+		fontSize: TYPOGRAPHY.fontSize.sm,
+		lineHeight: 20,
 		letterSpacing: -0.176,
 	},
 	bottomRow: {
@@ -232,9 +235,6 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		gap: SPACING.sm,
 		width: "100%",
-	},
-	bottomRowNoStatus: {
-		justifyContent: "flex-start",
 	},
 	value: {
 		flex: 1,

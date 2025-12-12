@@ -10,13 +10,18 @@ import { useTheme } from "@/contexts/ThemeProvider";
 import { StatCard } from "@/designsystem";
 import { SPACING } from "@/styles/spacing";
 import { TYPOGRAPHY } from "@/styles/typography";
+import { getFontFamily } from "@/utils/fonts";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Dimensions, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const CARD_WIDTH = (SCREEN_WIDTH - SPACING.md * 2 - SPACING.md) / 2; // Screen width - padding - gap, divided by 2
 
 export default function HomeScreen() {
 	const { colors } = useTheme();
+	const insets = useSafeAreaInsets();
 
 	return (
 		<>
@@ -25,9 +30,20 @@ export default function HomeScreen() {
 				backgroundColor={colors["primary-dark"]}
 				translucent={false}
 			/>
+			{Platform.OS === "ios" && (
+				<View
+					style={[
+						styles.statusBarBackground,
+						{
+							backgroundColor: colors["primary-dark"],
+							height: insets.top,
+						},
+					]}
+				/>
+			)}
 			<SafeAreaView
 				style={[styles.container, { backgroundColor: colors.background }]}
-				edges={["top", "left", "right"]}
+				edges={["left", "right", "bottom"]}
 			>
 				<ScrollView
 					style={styles.scrollView}
@@ -38,9 +54,10 @@ export default function HomeScreen() {
 							styles.sectionTitle,
 							{
 								color: colors["text-strong"],
-								fontFamily: TYPOGRAPHY.fontFamily.medium,
+								fontFamily: getFontFamily("medium"),
 							},
 						]}
+						numberOfLines={1}
 					>
 						Your Stats
 					</Text>
@@ -66,16 +83,13 @@ export default function HomeScreen() {
 						<StatCard
 							title="Late Arrivals"
 							value="7 Times"
-							icon={
-								<AlarmXmarkCircle size={20} color={colors.warning} />
-							}
+							icon={<AlarmXmarkCircle size={20} color={colors.warning} />}
 							iconColor={colors.warning}
 							iconBgColor="#fff4eb"
 							style={styles.card}
 						/>
 						<StatCard
 							title="Contract Status"
-							value=""
 							customValue={
 								<View
 									style={[
@@ -97,9 +111,10 @@ export default function HomeScreen() {
 											styles.contractText,
 											{
 												color: colors["text-sub"],
-												fontFamily: TYPOGRAPHY.fontFamily.medium,
+												fontFamily: getFontFamily("medium"),
 											},
 										]}
+										numberOfLines={1}
 									>
 										Ends in 42 Days
 									</Text>
@@ -118,6 +133,13 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+	statusBarBackground: {
+		position: "absolute",
+		top: 0,
+		left: 0,
+		right: 0,
+		zIndex: 1000,
+	},
 	container: {
 		flex: 1,
 	},
@@ -139,7 +161,7 @@ const styles = StyleSheet.create({
 		gap: SPACING.md,
 	},
 	card: {
-		width: "47%", // Approximately 2 columns with gap
+		width: CARD_WIDTH,
 	},
 	contractBadge: {
 		flexDirection: "row",
